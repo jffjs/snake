@@ -15,13 +15,13 @@
     },
 
     reset: function() {
-      var rows = this.game.height / 50;
-      var cols = this.game.width / 50;
+      var rows = this.game.height / this.sprite.height;
+      var cols = this.game.width / this.sprite.width;
       var row, col;
       do {
-        row = Math.floor(Math.random() * (rows + 1));
-        col = Math.floor(Math.random() * (cols + 1));
-        this.sprite.reset(col * 50, row * 50);
+        row = Math.floor(Math.random() * rows);
+        col = Math.floor(Math.random() * cols);
+        this.sprite.reset(col * this.sprite.width, row * this.sprite.height);
       } while (this.game.physics.overlap(this.sprite, this.snake.sprites));
     }
 
