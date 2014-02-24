@@ -63,8 +63,9 @@
       this.sprites.getAt(this.segments[0]).reset(x, y);
 
       // testing
-      if (Math.random() * 100 > 85)
-        this.grow2();
+      if (Math.random() * 100 > 85) {
+        this.grow();
+      }
     },
 
     grow: function() {
@@ -86,7 +87,7 @@
       console.log('length: ' + this.length);
       this.sprites.forEachAlive(function(segment) {
         var i = this.sprites.getIndex(segment);
-        console.log(i + ": " + "(" + segment.x + ", " + segment.y + ")");
+        console.log(i + ': ' + '(' + segment.x + ', ' + segment.y + ')');
       }, this);
     }
 
