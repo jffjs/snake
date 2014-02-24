@@ -7,6 +7,7 @@
     this.length = length || 5;
     this.speed = speed || 500;
     this.direction = { x: 0, y: -1 };
+    this.segments = [];
     this.name = 'snake';
     this.sprites = null;
     this.keys = {};
@@ -14,6 +15,10 @@
 
   Snake.prototype = {
     create: function() {
+      for (var i = 0; i < this.length; i++) {
+        this.segments.push(i);
+      }
+
       this.sprites = this.game.add.group(null, this.name);
       this.sprites.createMultiple(this.length, this.name, null, true);
 
@@ -35,7 +40,6 @@
       this.keys.right.onDown.add(this.moveRight, this);
       
       this.timer = this.game.time.events.loop(this.speed, this.move, this);
-      //this.timer = this.game.time.events.loop(2500, this.grow, this);
     },
 
     moveUp: function() {
@@ -52,33 +56,27 @@
     },
 
     move: function() {
-      var neck = this.sprites.getAt(this.head);
-      this.head = this.tail;
-      this.tail = this.tail - 1 >= 0 ? this.tail - 1 : this.length - 1;
-      //console.log("moving " + this.head + " to head");
-      //console.log("head: " + this.head);
-      //console.log("tail: " + this.tail);
+      var neck = this.sprites.getAt(this.segments[0]);
+      this.segments.unshift(this.segments.pop());
       var x = neck.x + 50 * this.direction.x;
       var y = neck.y + 50 * this.direction.y;
-      this.sprites.getAt(this.head).reset(x, y);
+      this.sprites.getAt(this.segments[0]).reset(x, y);
+
+      // testing
       if (Math.random() * 100 > 85)
-        this.grow();
-      //this.log();
+        this.grow2();
     },
 
     grow: function() {
-      var nextTail = this.tail === 0 ? this.length - 1 : this.tail - 1;
-      var s1 = this.sprites.getAt(nextTail);
-      var s2 = this.sprites.getAt(this.tail);
-      var diffx = s2.x - s1.x;
-      var diffy = s2.y - s1.y;
-      var x = s2.x,
-          y = s2.y;
+      var seg1 = this.sprites.getAt(this.segments[this.length - 2]);
+      var seg2 = this.sprites.getAt(this.segments[this.length - 1]);
+      var diffx = seg2.x - seg1.x;
+      var diffy = seg2.y - seg1.y;
+      var x = seg2.x,
+          y = seg2.y;
+      this.segments.push(this.length);
       this.length += 1;
-      var s3 = this.sprites.create(x + diffx, y + diffy, this.name);
-      console.log("s1: " + s1.x +  ", " + s1.y);
-      console.log("s2: " + s2.x +  ", " + s2.y);
-      console.log("s3: " + s3.x +  ", " + s3.y);
+      this.sprites.create(x + diffx, y + diffy, this.name);
     },
 
     log: function() {
