@@ -9,7 +9,7 @@
     this.direction = { x: 0, y: -1 };
     this.segments = [];
     this.sprites = null;
-    this.keys = {};
+    this.dead = false;
   }
 
   Snake.prototype = {
@@ -38,7 +38,8 @@
         segmentY += 50;
       }, this);
 
-      this.timer = this.game.time.events.loop(this.speed, this.move, this);
+      //this.timer = this.game.time.events.loop(this.speed, this.move, this);
+      this._lastTick = this.game.time.now;
     },
 
     update: function() {
@@ -53,6 +54,16 @@
       } else if (keyboard.justPressed(Phaser.Keyboard.RIGHT)) {
         this.direction = { x: 1, y: 0 };
       }
+
+      var now = this.game.time.now;
+      if (now - this._lastTick >= this.speed) {
+        this._lastTick = now;
+        this.move();
+      }
+    },
+
+    destroy: function() {
+      this.sprites.destroy(true);
     },
 
     move: function() {
@@ -60,11 +71,18 @@
       this.segments.unshift(this.segments.pop());
       var x = neck.x + 50 * this.direction.x;
       var y = neck.y + 50 * this.direction.y;
+
+      // check if move is legal, if not, kill snake
+      if (x < 0 || x >= this.game.width || y < 0 || y >= this.game.height) {
+        this.dead = true;
+        return;
+      }
+
       this.sprites.getAt(this.segments[0]).reset(x, y);
 
       // testing
       if (Math.random() * 100 > 85) {
-        this.grow();
+        //this.grow();
       }
     },
 
@@ -84,10 +102,8 @@
       console.log('##############################');
       console.log(this.segments);
       console.log('length: ' + this.length);
-      this.sprites.forEachAlive(function(segment) {
-        var i = this.sprites.getIndex(segment);
-        console.log(i + ': ' + '(' + segment.x + ', ' + segment.y + ')');
-      }, this);
+      var head = this.sprites.getAt(this.segments[0]);
+      console.log('head: ' + '(' + head.x + ', ' + head.y + ')');
     }
 
   };

@@ -8,9 +8,6 @@
   Game.prototype = {
 
     create: function () {
-      var x = this.game.width / 2
-        , y = this.game.height / 2;
-
       this.snake = new this.game.entities.Snake(this.game, 5);
       this.snake.create();
 
@@ -19,9 +16,13 @@
 
     update: function () {
       this.snake.update();
-      //if (this.snake.getAt(0).inWorld === false) {
-        //this.game.state.start('menu');
-      //}
+      if (this.snake.dead) {
+        this.game.state.start('menu');
+      }
+    },
+
+    shutdown: function() {
+      this.snake.destroy();
     },
 
     onInputDown: function () {
