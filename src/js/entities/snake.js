@@ -27,8 +27,6 @@
         segment.reset(this.start.x, segmentY);
         segmentY += 50;
       }, this);
-      this.head = 0;
-      this.tail = this.length - 1;
 
       this.keys.up = this.game.input.keyboard.addKey(Phaser.Keyboard.UP);
       this.keys.down = this.game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
@@ -82,8 +80,7 @@
 
     log: function() {
       console.log('##############################');
-      console.log('head: ' + this.head);
-      console.log('tail: ' + this.tail);
+      console.log(this.segments);
       console.log('length: ' + this.length);
       this.sprites.forEachAlive(function(segment) {
         var i = this.sprites.getIndex(segment);
