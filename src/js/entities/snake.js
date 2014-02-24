@@ -1,56 +1,58 @@
 (function() {
   'use strict';
 
-  function Snake(game, start, length, speed) {
+  function Snake(game, length, speed) {
+    this.name = 'snake';
     this.game = game;
-    this.start = start;
     this.length = length || 5;
     this.speed = speed || 500;
     this.direction = { x: 0, y: -1 };
     this.segments = [];
-    this.name = 'snake';
     this.sprites = null;
     this.keys = {};
   }
 
   Snake.prototype = {
     create: function() {
+      // set up initial position
+      var x = this.game.width / 2
+        , y = this.game.height / 2;
+      while(x % 50 !== 0) {
+        x--;
+      }
+      while(y % 50 !== 0) {
+        y--;
+      }
+
+      // set up initial segment placement
       for (var i = 0; i < this.length; i++) {
         this.segments.push(i);
       }
 
+      // create sprite group and initialize locations
       this.sprites = this.game.add.group(null, this.name);
       this.sprites.createMultiple(this.length, this.name, null, true);
-
-      var segmentY  = this.start.y;
+      var segmentY = y;
       this.sprites.forEachAlive(function(segment) {
-        segment.reset(this.start.x, segmentY);
+        segment.reset(x, segmentY);
         segmentY += 50;
       }, this);
 
-      this.keys.up = this.game.input.keyboard.addKey(Phaser.Keyboard.UP);
-      this.keys.down = this.game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
-      this.keys.left = this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
-      this.keys.right = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
-      this.keys.up.onDown.add(this.moveUp, this);
-      this.keys.down.onDown.add(this.moveDown, this);
-      this.keys.left.onDown.add(this.moveLeft, this);
-      this.keys.right.onDown.add(this.moveRight, this);
-      
       this.timer = this.game.time.events.loop(this.speed, this.move, this);
     },
 
-    moveUp: function() {
-      this.direction = { x: 0, y: -1 };
-    },
-    moveDown: function() {
-      this.direction = { x: 0, y: 1 };
-    },
-    moveLeft: function() {
-      this.direction = { x: -1, y: 0 };
-    },
-    moveRight: function() {
-      this.direction = { x: 1, y: 0 };
+    update: function() {
+      var keyboard = this.game.input.keyboard;
+
+      if (keyboard.justPressed(Phaser.Keyboard.UP)) {
+        this.direction = { x: 0, y: -1 };
+      } else if (keyboard.justPressed(Phaser.Keyboard.DOWN)) {
+        this.direction = { x: 0, y: 1 };
+      } else if (keyboard.justPressed(Phaser.Keyboard.LEFT)) {
+        this.direction = { x: -1, y: 0 };
+      } else if (keyboard.justPressed(Phaser.Keyboard.RIGHT)) {
+        this.direction = { x: 1, y: 0 };
+      }
     },
 
     move: function() {
