@@ -5,7 +5,7 @@
     this.name = 'snake';
     this.game = game;
     this.length = length || 5;
-    this.speed = speed || 500;
+    this.speed = speed || 250;
     this.direction = { x: 0, y: -1 };
     this.segments = [];
     this.sprites = null;
@@ -43,15 +43,16 @@
     },
 
     update: function() {
-      var keyboard = this.game.input.keyboard;
+      var keyboard = this.game.input.keyboard,
+          threshold = 250;
 
-      if (keyboard.justPressed(Phaser.Keyboard.UP)) {
+      if (keyboard.justPressed(Phaser.Keyboard.UP, threshold) && this.direction.y != 1) {
         this.direction = { x: 0, y: -1 };
-      } else if (keyboard.justPressed(Phaser.Keyboard.DOWN)) {
+      } else if (keyboard.justPressed(Phaser.Keyboard.DOWN, threshold) && this.direction.y != -1) {
         this.direction = { x: 0, y: 1 };
-      } else if (keyboard.justPressed(Phaser.Keyboard.LEFT)) {
+      } else if (keyboard.justPressed(Phaser.Keyboard.LEFT, threshold) && this.direction.x != 1) {
         this.direction = { x: -1, y: 0 };
-      } else if (keyboard.justPressed(Phaser.Keyboard.RIGHT)) {
+      } else if (keyboard.justPressed(Phaser.Keyboard.RIGHT, threshold) && this.direction.x != -1) {
         this.direction = { x: 1, y: 0 };
       }
 
