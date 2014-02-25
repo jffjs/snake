@@ -14,15 +14,25 @@
       this.reset();
     },
 
+    update: function() {
+      if (this.game.physics.overlap(this.sprite, this.snake.head)) {
+        this.snake.grow();
+        this.reset();
+      }
+    },
+
     reset: function() {
       var rows = this.game.height / this.sprite.height;
       var cols = this.game.width / this.sprite.width;
       var row, col;
+
       do {
         row = Math.floor(Math.random() * rows);
         col = Math.floor(Math.random() * cols);
         this.sprite.reset(col * this.sprite.width, row * this.sprite.height);
       } while (this.game.physics.overlap(this.sprite, this.snake.sprites));
+      this.sprite.scale.setTo(0.9, 0.9);
+      this.sprite.anchor.setTo(0.1, 0.1);
     }
 
   };

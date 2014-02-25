@@ -20,6 +20,7 @@
 
     update: function () {
       this.snake.update();
+      this.food.update();
       if (this.snake.dead) {
         this.game.state.start('menu');
       }
