@@ -48,6 +48,9 @@
       var points = this.snake.length - elapsed;
       points = points >= 1 ? points : 1;
       this.game.score += points;
+      if (this.game.score > this.game.highScore) {
+        this.game.highScore = this.game.score;
+      }
       this.labelScore.content = this.game.score;
     },
 

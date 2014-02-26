@@ -20,6 +20,8 @@
       this.startTxt = this.add.bitmapText(x, y, 'START', {font: '12px minecraftia', align: 'center'});
       this.startTxt.anchor.setTo(0.5, 0.5);
 
+      this.startTxt = this.add.bitmapText(5, 5, 'Score: ' + this.game.score, {font: '12px minecraftia', align: 'left'});
+      this.startTxt = this.add.bitmapText(5, 25, 'High Score: ' + this.game.highScore, {font: '12px minecraftia', align: 'left'});
       this.input.onDown.add(this.onDown, this);
     },
 
