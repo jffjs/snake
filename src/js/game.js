@@ -16,11 +16,22 @@
       this.food.create();
 
       this.input.onDown.add(this.onInputDown, this);
+
+      this.game.score = 0;
+      var style = { font: '20px Arial', fill: '#ffffff' };
+      this.labelScore = this.add.text(5, 5, '0', style);
+      this.scoreTime = this.game.time.now / 1000;
     },
 
     update: function () {
       this.snake.update();
-      this.food.update();
+      if (this.game.physics.overlap(this.food.sprite, this.snake.head)) {
+        this.snake.grow();
+        this.food.reset();
+
+        this.updateScore();
+      }
+
       if (this.snake.dead) {
         this.game.state.start('menu');
       }
@@ -28,6 +39,16 @@
 
     shutdown: function() {
       this.snake.destroy();
+      this.food.destroy();
+    },
+
+    updateScore: function() {
+      var elapsed = Math.floor(this.game.time.elapsedSecondsSince(this.scoreTime));
+      this.scoreTime = this.game.time.now;
+      var points = this.snake.length - elapsed;
+      points = points >= 1 ? points : 1;
+      this.game.score += points;
+      this.labelScore.content = this.game.score;
     },
 
     onInputDown: function () {

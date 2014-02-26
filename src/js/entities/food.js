@@ -14,13 +14,6 @@
       this.reset();
     },
 
-    update: function() {
-      if (this.game.physics.overlap(this.sprite, this.snake.head)) {
-        this.snake.grow();
-        this.reset();
-      }
-    },
-
     reset: function() {
       var rows = this.game.height / this.sprite.height;
       var cols = this.game.width / this.sprite.width;
@@ -33,8 +26,11 @@
       } while (this.game.physics.overlap(this.sprite, this.snake.sprites));
       this.sprite.scale.setTo(0.9, 0.9);
       this.sprite.anchor.setTo(0.1, 0.1);
-    }
+    },
 
+    destroy: function() {
+      this.sprite.destroy();
+    },
   };
 
   window['snake'] = window['snake'] || {};

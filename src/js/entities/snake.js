@@ -73,6 +73,7 @@
       this.segments.unshift(this.segments.pop());
       var x = neck.x + 50 * this.direction.x;
       var y = neck.y + 50 * this.direction.y;
+      this.head = this.sprites.getAt(this.segments[0]);
 
       // check if move is legal, if not, kill snake
       if (x < 0 || x >= this.game.width || y < 0 || y >= this.game.height) {
@@ -80,13 +81,15 @@
         return;
       }
 
-      this.head = this.sprites.getAt(this.segments[0]);
-      this.sprites.getAt(this.segments[0]).reset(x, y);
-
-      // testing
-      if (Math.random() * 100 > 85) {
-        //this.grow();
+      for (var i=1; i < this.length; i++) {
+        var segment = this.sprites.getAt(this.segments[i]);
+        if (x === segment.x && y === segment.y) {
+          this.dead = true;
+          return;
+        }
       }
+
+      this.sprites.getAt(this.segments[0]).reset(x, y);
     },
 
     grow: function() {
